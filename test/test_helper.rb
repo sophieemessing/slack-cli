@@ -9,12 +9,8 @@ require 'minitest/reporters'
 require 'minitest/skip_dsl'
 require 'vcr'
 
-Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
-VCR.configure do |config|
-  config.cassette_library_dir = "test/cassettes"
-  config.hook_into :webmock
-end
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 VCR.configure do |config|
   config.cassette_library_dir = "test/cassettes" # folder where casettes will be located
@@ -25,5 +21,7 @@ VCR.configure do |config|
   }
 
   # Don't leave our token lying around in a cassette file.
-
+  config.filter_sensitive_data("<SLACK_API_TOKEN>") do
+    ENV["SLACK_API_TOKEN"]
+  end
 end
