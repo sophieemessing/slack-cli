@@ -1,16 +1,38 @@
+require 'httparty'
+require 'prettyprint'
+require 'dotenv'
+
+require_relative 'recipient'
+
+Dotenv.load
+
+
 class Channel < Recipient
 
-  def self.list_all
-    response = HTTParty.get('https://slack.com/api/channels.list', query: {
-        token: ENV['SLACK_API_TOKEN']
-    })
+  attr_reader :topic,:member_count
 
-    pp response
-
-    users = response["members"]
-
-    users.each do |user|
-      p user["name"]
-    end
+  def initialize(slack_id, name, topic, member_count)
+    super(slack_id, name)
+    @topic = topic
+    @member_count = member_count
   end
+
+  def self.list_all
+    channel_url = 'https://slack.com/api/conversations.list'
+    response = self.get(channel_url, query: { token: ENV['SLACK_API_TOKEN']})
+
+    channels = response["channels"]
+
+    list = []
+    channels.each do |channel|
+      list << Channel.new(channel["id"], channel["name"], channel["purpose"]["value"], channel["num_members"])
+    end
+    return list
+  end
+
+  def information
+    return "\n channel name: #{self.name} \n topic: #{self.topic} \n user count: #{self.member_count} \n slack_id: #{self.slack_id}"
+  end
+
 end
+

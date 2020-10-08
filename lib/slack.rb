@@ -15,17 +15,28 @@ require_relative 'workspace'
 
 def main
   puts "Welcome to the Ada Slack CLI!"
-  # TODO project
 
   workspace = Workspace.new
 
-  puts ENV['SLACK_API_TOKEN']
+  until false
+    puts "\n"
+    puts "There are #{workspace.users.length} users and #{workspace.channels.length} channels."
+    puts "Please enter one of the following: list users, list channels, quit"
+    input = gets.chomp
 
-  response = HTTParty.get('https://slack.com/api/users.list', query: {
-    token: ENV['SLACK_API_TOKEN']
-    })
+  case input
+  when "list users"
+    puts workspace.list_users
+  when "list channels"
+    puts workspace.list_channels
+  when "quit"
+    puts "Thank you for using the Ada Slack CLI"
+    break
+  else
+    puts "please enter a valid input: list users, list channels, quit"
+  end
 
-  puts "Thank you for using the Ada Slack CLI"
+end
 end
 
 main if __FILE__ == $PROGRAM_NAME
