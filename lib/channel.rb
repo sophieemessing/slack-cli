@@ -6,7 +6,6 @@ require_relative 'recipient'
 
 Dotenv.load
 
-
 class Channel < Recipient
 
   attr_reader :topic,:member_count
@@ -16,7 +15,6 @@ class Channel < Recipient
     @topic = topic
     @member_count = member_count
   end
-
   def self.list_all
     channel_url = 'https://slack.com/api/conversations.list'
     response = self.get(channel_url, query: { token: ENV['SLACK_API_TOKEN']})
