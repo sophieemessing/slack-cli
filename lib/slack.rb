@@ -21,8 +21,9 @@ def main
   until false
     puts "\n"
     puts "There are #{workspace.users.length} users and #{workspace.channels.length} channels."
-    puts "Please enter one of the following: list users, list channels, select user, select channel, quit. Enter show details for more info when a user or channel is selected."
+    puts "Please enter one of the following: list users, list channels, select user, select channel, send a message, quit. Enter show details for more info when a user or channel is selected."
     input = gets.chomp
+
 
   case input
   when "list users"
@@ -30,15 +31,21 @@ def main
   when "list channels"
     puts workspace.list_channels
   when "select channel"
+    puts "please enter a channel name or ID:"
     input = gets.chomp
     workspace.select_channel(input)
-    puts "selected channel: #{workspace.selected.name} \n ID: #{workspace.selected.slack_id}"
+    puts "\n selected channel: #{workspace.selected.name} \n ID: #{workspace.selected.slack_id}"
   when "select user"
+    puts "please enter a username or ID:"
     input = gets.chomp
     workspace.select_user(input)
-    puts "selected user: #{workspace.selected.name} \n ID: #{workspace.selected.slack_id}"
+    puts "\n selected user: #{workspace.selected.name} \n ID: #{workspace.selected.slack_id}"
   when "show details"
     puts workspace.show_details
+  when "send a message"
+    puts "What message would you like to send?"
+    message = gets.chomp.to_s
+    puts workspace.send_message(message)
   when "quit"
     puts "Thank you for using the Ada Slack CLI"
     break
