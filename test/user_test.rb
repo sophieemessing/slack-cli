@@ -13,13 +13,6 @@ describe "User class" do
           expect(user).must_be_instance_of User
         end
       end
+    end
   end
-  end
-  end
-
-# return nil for invalid input
-# workspacehas list ofsers and channels
-# canfind user by ID
-# can find user by name
-# canfind channel by ID
-# can find channel name
+end

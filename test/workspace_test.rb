@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 require_relative '../lib/slack'
 
-
 describe "Workspace" do
   describe "can initialize a workspace" do
     before do
@@ -10,20 +9,20 @@ describe "Workspace" do
       end
     end
 
-  it "can initialize a workspace" do
+    it "can initialize a workspace" do
 
       expect(@workspace).must_be_kind_of Workspace
       expect(@workspace.users).must_be_kind_of Array
       expect(@workspace.channels).must_be_kind_of Array
       expect(@workspace.selected).must_be_nil
-  end
+    end
 
-  it "initializes with user and channel objects" do
+    it "initializes with user and channel objects" do
 
       expect(@workspace.users.first).must_be_kind_of User
       expect(@workspace.channels.first).must_be_kind_of Channel
+    end
   end
-end
 
   describe "can list users and channels" do
     before do
@@ -56,62 +55,62 @@ end
       end
     end
 
-      it "can select a user by name" do
-        user = @workspace.select_user("slackbot")
-        expect(user).must_be_instance_of User
-        expect(user.name).must_equal "slackbot"
+    it "can select a user by name" do
+      user = @workspace.select_user("slackbot")
+      expect(user).must_be_instance_of User
+      expect(user.name).must_equal "slackbot"
 
-        user = @workspace.select_user("mahaelmais")
-        expect(user).must_be_instance_of User
-        expect(user.name).must_equal "mahaelmais"
-        expect(user.slack_id).must_equal "U01CQGU5LKS"
-      end
+      user = @workspace.select_user("mahaelmais")
+      expect(user).must_be_instance_of User
+      expect(user.name).must_equal "mahaelmais"
+      expect(user.slack_id).must_equal "U01CQGU5LKS"
+    end
 
-      it "can select a user by ID" do
-        user = @workspace.select_user("U01BXJZPYAH")
-        expect(user).must_be_instance_of User
-        expect(user.name).must_equal "sophie.e.messing"
-        expect(user.slack_id).must_equal "U01BXJZPYAH"
+    it "can select a user by ID" do
+      user = @workspace.select_user("U01BXJZPYAH")
+      expect(user).must_be_instance_of User
+      expect(user.name).must_equal "sophie.e.messing"
+      expect(user.slack_id).must_equal "U01BXJZPYAH"
 
-        user = @workspace.select_user("U01CQHU8WBS")
-        expect(user).must_be_instance_of User
-        expect(user.name).must_equal "earth_mahaelmais_api_"
-        expect(user.slack_id).must_equal "U01CQHU8WBS"
-      end
+      user = @workspace.select_user("U01CQHU8WBS")
+      expect(user).must_be_instance_of User
+      expect(user.name).must_equal "earth_mahaelmais_api_"
+      expect(user.slack_id).must_equal "U01CQHU8WBS"
+    end
 
-      it "can select a channel by name" do
-        channel = @workspace.select_channel("random")
-        expect(channel).must_be_instance_of Channel
-        expect(channel.name).must_equal "random"
-        expect(channel.slack_id).must_equal "C01C0TJK6G3"
+    it "can select a channel by name" do
+      channel = @workspace.select_channel("random")
+      expect(channel).must_be_instance_of Channel
+      expect(channel.name).must_equal "random"
+      expect(channel.slack_id).must_equal "C01C0TJK6G3"
 
-      end
+    end
 
-      it "can select a channel by ID" do
-        channel = @workspace.select_channel("C01BXNGFDTP")
-        expect(channel).must_be_instance_of Channel
-        expect(channel.name).must_equal "test-channel"
-        expect(channel.slack_id).must_equal "C01BXNGFDTP"
+    it "can select a channel by ID" do
+      channel = @workspace.select_channel("C01BXNGFDTP")
+      expect(channel).must_be_instance_of Channel
+      expect(channel.name).must_equal "test-channel"
+      expect(channel.slack_id).must_equal "C01BXNGFDTP"
 
-      end
+    end
 
-      it "will return nil for invalid user input" do
-        user = @workspace.select_user("xxx")
-        expect(user).must_be_nil
-      end
+    it "will return nil for invalid user input" do
+      user = @workspace.select_user("xxx")
+      expect(user).must_be_nil
+    end
 
-      it "will return nil for invalid channel input" do
-        user = @workspace.select_user("00001111")
-        expect(user).must_be_nil
-      end
+    it "will return nil for invalid channel input" do
+      user = @workspace.select_user("00001111")
+      expect(user).must_be_nil
+    end
 
-      it "can show details for selected user" do 
-        user = @workspace.select_user("mahaelmais")
-        user_details = @workspace.show_details
+    it "can show details for selected user" do
+      user = @workspace.select_user("mahaelmais")
+      user_details = @workspace.show_details
 
-        expect(user_details).must_be_kind_of String
-        expect(user_details).must_include "U01CQGU5LKS"
-      end
+      expect(user_details).must_be_kind_of String
+      expect(user_details).must_include "U01CQGU5LKS"
+    end
 
     it "can show details for selected channel" do
       channel = @workspace.select_channel("general")
@@ -121,4 +120,4 @@ end
       expect(channel_details).must_include "C01BTVCEXCN"
     end
   end
-  end
+end

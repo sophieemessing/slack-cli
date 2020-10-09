@@ -1,7 +1,6 @@
 require 'httparty'
 require 'dotenv'
 
-
 require_relative 'user'
 require_relative 'channel'
 
@@ -37,14 +36,19 @@ class Workspace
 
   def select_channel(input)
     @selected = @channels.find { |channel| input == channel.name || input == channel.slack_id}
-    # raise ArgumentError.new("#{input} not found") if @selected == nil
     return @selected
   end
 
   def select_user(input)
     @selected = @users.find { |user| input == user.name || input == user.slack_id}
-    # raise ArgumentError.new("#{input} not found") if @selected == nil
     return @selected
+  end
+
+  def ask_to_select(input)
+    select_channel(input)
+    if select_channel(input) == nil
+      select_user(input)
+    end
   end
 
   def show_details
@@ -53,21 +57,20 @@ class Workspace
   end
 
 
-    def send_message(message)
+  def send_message(message)
 
-      response = HTTParty.post(
-          "https://slack.com/api/chat.postMessage",
-          body:  {
-              token: ENV['SLACK_API_TOKEN'],
-              text: message,
-              channel: @selected.slack_id
-          })
-      unless response.code == 200 && response.parsed_response["ok"]
-        raise SlackApiError, "Error when posting #{message} to #{@selected.name}, error: #{response.parsed_response["error"]}"
-      end
+    response = HTTParty.post(
+        "https://slack.com/api/chat.postMessage",
+        body:  {
+            token: ENV['SLACK_API_TOKEN'],
+            text: message,
+            channel: @selected.slack_id
+        })
+    unless response.code == 200 && response.parsed_response["ok"]
+      raise SlackApiError, "Error when posting #{message} to #{@selected.name}, error: #{response.parsed_response["error"]}"
     end
+
   end
+end
 
-
-# response.code == 200 &&
 

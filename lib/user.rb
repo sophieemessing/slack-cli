@@ -32,10 +32,6 @@ class User < Recipient
     return list
   end
 
-  # def information
-  #   return "#{self.name}, #{self.real_name}, #{self.slack_id}"
-  # end
-
   def details
     return "\n username: #{self.name} \n real name: #{self.real_name} \n slack ID: #{self.slack_id} \n status: #{self.status_text} \n emoji: #{self.status_emoji}"
   end
