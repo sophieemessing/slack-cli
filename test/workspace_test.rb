@@ -120,4 +120,51 @@ describe "Workspace" do
       expect(channel_details).must_include "C01BTVCEXCN"
     end
   end
+
+  describe "send_message" do
+    before do
+      VCR.use_cassette("send_message") do
+        @workspace = Workspace.new
+      end
+    end
+
+    it "can send a message" do
+      VCR.use_cassette("send_message") do
+        @workspace.select_user("sophie.e.messing")
+        @workspace.send_message("This post should work")
+      end
+    end
+
+    it "will raise an error if we send a message with no channel or user" do
+      expect { @workspace.send_message("This post should not work") }.must_raise SlackApiError
+    end
+  end
+
+  describe "ask_to_select" do
+    it"can select a user" do
+      VCR.use_cassette("ask_to_select") do
+        @workspace = Workspace.new
+      end
+      expect(@workspace.ask_to_select("sophie.e.messing")).wont_be_nil
+    end
+
+    it"can select a channel" do
+      VCR.use_cassette("ask_to_select") do
+        @workspace = Workspace.new
+      end
+      expect(@workspace.ask_to_select("general")).wont_be_nil
+    end
+
+    it"can't select invalid input" do
+      VCR.use_cassette("ask_to_select") do
+        @workspace = Workspace.new
+      end
+      expect(@workspace.ask_to_select("xxxxxxxxxx")).must_be_nil
+    end
+
+  end
 end
+
+
+
+

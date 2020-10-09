@@ -15,4 +15,29 @@ describe "Channel class" do
       end
     end
   end
+
+  describe "send message" do
+
+    it "can send a message to a channel" do
+      VCR.use_cassette("channel_send_message") do
+        channel = Channel.new("C01BTVCEXCN", "general", "topic", 3)
+        channel.send_message("This post should work")
+      end
+    end
+
+    it "will not send a message for invalid channel ID" do
+      VCR.use_cassette("channel_send_message") do
+        channel = Channel.new(99999, "test_channel", "this is a fake channel", 3)
+        expect { channel.send_message("This post should not work") }.must_raise SlackApiError
+      end
+    end
+
+    it "returns an error for an invalid token" do
+      VCR.use_cassette("channel_send_not_authed") do
+        channel = Channel.new("C01BTVCEXCN", "general", "topic", 3)
+
+        expect { channel.send_message("This post should not work") }.must_raise SlackApiError
+      end
+    end
+  end
 end

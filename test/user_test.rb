@@ -15,4 +15,30 @@ describe "User class" do
       end
     end
   end
+
+  describe "send message" do
+
+    it "can send a message to a user" do
+      VCR.use_cassette("user_send_message") do
+        user = User.new("U01CQGU5LKS", "mahaelmais", "mahaelmais", "", "")
+        user.send_message("This post should work")
+      end
+    end
+
+    it "will not send a message for invalid user ID" do
+      VCR.use_cassette("user_send_message") do
+        user = User.new(99999, "test_user", "fake_user", "", "")
+        expect { user.send_message("This post should not work") }.must_raise SlackApiError
+      end
+    end
+
+    it "returns an error for an invalid token" do
+      VCR.use_cassette("user_send_not_authed") do
+        user = User.new("U01CQGU5LKS", "mahaelmais", "mahaelmais", "", "")
+
+        expect { user.send_message("This post should not work") }.must_raise SlackApiError
+      end
+    end
+  end
+
 end

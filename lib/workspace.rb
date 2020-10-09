@@ -6,8 +6,6 @@ require_relative 'channel'
 
 Dotenv.load
 
-class SlackApiError < StandardError; end
-
 class Workspace
 
   attr_reader :users,:channels,:selected
@@ -46,30 +44,20 @@ class Workspace
 
   def ask_to_select(input)
     select_channel(input)
-    if select_channel(input) == nil
+    if @selected == nil
       select_user(input)
     end
+    return @selected
   end
 
   def show_details
-    raise ArgumentError.new("no user or channel selected") if @selected == nil
+    raise SlackApiError.new("no user or channel selected") if @selected == nil
     return @selected.details
   end
 
-
   def send_message(message)
-
-    response = HTTParty.post(
-        "https://slack.com/api/chat.postMessage",
-        body:  {
-            token: ENV['SLACK_API_TOKEN'],
-            text: message,
-            channel: @selected.slack_id
-        })
-    unless response.code == 200 && response.parsed_response["ok"]
-      raise SlackApiError, "Error when posting #{message} to #{@selected.name}, error: #{response.parsed_response["error"]}"
-    end
-
+    raise SlackApiError.new("no user or channel selected") if @selected == nil
+    @selected.send_message(message)
   end
 end
 
